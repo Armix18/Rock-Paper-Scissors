@@ -1,92 +1,81 @@
-let humanChoice;
-let computerChoice;
+let computerChoice = 'Waiting for your selection';
 let humanScore = 0;
 let computerScore = 0;
+let playerSelection = 'Not Selected';
 
-function getComputerChoice(){
+const getHumanChoice = () => {
+    return playerSelection.toLocaleLowerCase();
+}
+
+const getComputerChoice = () => {
     let random = Math.floor(Math.random()*(4-1)+1);
-    //console.log(random);
 
     return (random == 1) ? computerChoice = 'rock' 
         : (random == 2) ? computerChoice = 'paper'
         : computerChoice = 'scissors';
 }
 
-function getHumanChoice(){
-    humanChoice = prompt('Pick rock, paper or scissors');
-    return humanChoice.toLocaleLowerCase()
-    //console.log(choice);
-}
+const playRound = (playerSelection, computerChoice) => {
 
-function playRound(humanChoice, computerChoice){
-
-    //humanChoice = humanChoice.toLowercase()
-    /*
-    if(computerChoice == 'rock' && humanChoice == 'paper'){
-        console.log('You lose! Paper beats rock')
-    }
-    */
-    if(computerChoice === humanChoice){
+    if(computerChoice === playerSelection){
         console.log('Draw! Play again!');
     } else if(computerChoice == 'rock') {
-        if(humanChoice == 'paper'){
+        if(playerSelection == 'paper'){
             console.log('You win! Paper beats Rock');
             humanScore++;
         }
-        else if(humanChoice == 'scissors'){
-            console.log('You lose! Rock beats Scissors');
-            computerScore++;
-        }
+        else computerScore++;
     } else if(computerChoice == 'paper') {
-        if(humanChoice == 'rock'){
+        if(playerSelection == 'rock'){
             console.log('You lose! Paper beats Rock');
             computerScore++;
         }
-        else if(humanChoice == 'scissors'){
-            console.log('You win! Scissors beats Paper');
-            humanScore++;
-        }
+        else humanScore++;
     } else if(computerChoice == 'scissors') {
-        if(humanChoice == 'paper'){
+        if(playerSelection == 'paper'){
             console.log('You lose! Scissors beats Paper');
             computerScore++;
         }
-        else if(humanChoice == 'rock'){
-            console.log('You win! Rock beats Scissors');
-            humanScore++;
-        }
-    } else {
-        console.log('error!');
+        else humanScore++;
+    } else { console.log('error!'); }
+}
+
+const seeValue = () => {
+    results.textContent = '\nMy selection: '+ playerSelection+
+    "\nBot selected: "+computerChoice+'\nMy Score: '+
+    humanScore+ '\nBot Score: '+computerScore;
+}
+
+const seeWinner = () => {
+    content.appendChild(winner);
+    setInterval(seeValue, 0);
+    if(humanScore == 5){
+        winner.textContent = 'You win :D!';
+    } else if(computerScore == 5){
+        winner.textContent = 'You lose :(';
     }
-    
 }
 
-function seeValue(){
-    console.log(humanChoice)
-    console.log(computerChoice)
-    console.log(humanScore)
-    console.log(computerScore)
-}
+let rock = document.querySelector('#rock');
+let paper = document.querySelector("#paper");
+let scissors = document.querySelector("#scissors");
 
-function playGame(){
+let selectionList = [rock, paper, scissors]
 
-    //let humanSelection = getHumanChoice()
-    //let computerSelection = getComputerChoice()
+selectionList.forEach((e) => {
+    e.addEventListener('click',() => {
+        playerSelection = e.textContent.toLocaleLowerCase();
+        playRound(getHumanChoice(), getComputerChoice());
+        seeWinner();
+    })
+});
 
-    playRound(getHumanChoice(), getComputerChoice())
-    seeValue()
-    playRound(getHumanChoice(), getComputerChoice())
-    seeValue()
-    playRound(getHumanChoice(), getComputerChoice())
-    seeValue()
-    playRound(getHumanChoice(), getComputerChoice())
-    seeValue()
-    playRound(getHumanChoice(), getComputerChoice())
-    seeValue()
+let content = document.querySelector('div');
+let results = document.createElement('div');
+let winner = document.createElement('p');
 
-    a = (humanScore>computerScore) ? console.log('You win!') : console.log('You lose =(')
-}
+setInterval(seeValue, 1000);
 
-playGame()
+content.appendChild(results);
 
-
+results.setAttribute('style', 'white-space: pre; font-size: 18px');
